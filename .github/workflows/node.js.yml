@@ -19,21 +19,24 @@ jobs:
         node-version: [18.x, 20.x, 22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
+    
     steps:
-    - uses: actions/checkout@v4
-    - name: chage-directory
-      run: |
-        pwd
-        cd my-app
-        pwd
-        ls
-    - name: Use Node.js ${{ matrix.node-version }}
-      run:
-        cd my-app
-    - uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+      - uses: actions/checkout@v4
+    
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: my-app/package-lock.json  # Important for caching
+    
+      - name: Install dependencies
+        run: npm ci
+        working-directory: my-app
+    
+      - name: Build
+        run: npm run build --if-present
+        working-directory: my-app
+    
+      - name: Test
+        run: npm test
