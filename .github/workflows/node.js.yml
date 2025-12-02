@@ -21,6 +21,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: chage-directory
       run:
         cd my-app
     - name: Use Node.js ${{ matrix.node-version }}
